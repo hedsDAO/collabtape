@@ -4,6 +4,8 @@ pragma solidity 0.8.10;
 import "ERC721A/ERC721A.sol";
 import "openzeppelin-contracts/contracts/access/Ownable.sol";
 
+error FailedTransfer();
+
 contract CollabTape is ERC721A, Ownable {
     struct SaleConfig {
         uint64 price;
@@ -67,5 +69,11 @@ contract CollabTape is ERC721A, Ownable {
     /// @notice Update premint start time - must be contract owner
     function updatePremintStartTime(uint32 _premintStartTime) external onlyOwner {
         saleConfig.premintStartTime = _premintStartTime;
+    }
+
+    /// @notice Withdraw contract balance - must be contract owner
+    function withdraw() external onlyOwner {
+        (bool success, ) = payable(withdrawAddress).call{value: address(this).balance}("");
+        if (!success) revert FailedTransfer();
     }
 }
