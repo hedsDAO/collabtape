@@ -5,6 +5,9 @@ import "ERC721A/ERC721A.sol";
 import "openzeppelin-contracts/contracts/access/Ownable.sol";
 
 error FailedTransfer();
+error InsufficientFunds();
+error ExceedsMaxSupply();
+error BeforeSaleStart();
 
 contract CollabTape is ERC721A, Ownable {
     struct SaleConfig {
@@ -31,6 +34,21 @@ contract CollabTape is ERC721A, Ownable {
         saleConfig.startTime = 0;
         // TODO: Set premintStartTime
         saleConfig.premintStartTime = 0;
+    }
+
+    /// @notice Mint a HedsTape token
+    /// @param _amount Number of tokens to mint
+    function mint(uint _amount) external payable {
+        SaleConfig memory config = saleConfig;
+        uint _price = uint(config.price);
+        uint _maxSupply = uint(config.maxSupply);
+        uint _startTime = uint(config.startTime);
+
+        if (_amount * _price != msg.value) revert InsufficientFunds();
+        if (_nextTokenId() + _amount > _maxSupply) revert ExceedsMaxSupply();
+        if (block.timestamp < _startTime) revert BeforeSaleStart();
+
+        _safeMint(msg.sender, _amount);
     }
 
     /// @notice Return tokenURI for a given token
