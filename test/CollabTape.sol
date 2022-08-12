@@ -1,9 +1,9 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.10;
 
 import "forge-std/Test.sol";
 
-contract ContractTest is Test {
+contract CollabTapeTest is Test {
     function setUp() public {}
 
     function testExample() public {
