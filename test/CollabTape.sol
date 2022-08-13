@@ -43,6 +43,12 @@ contract CollabTapeTest is Test {
         assertEq(newBaseUri, "new base uri");
     }
 
+    function testCannotSetBaseUriAsNotOwner() public {
+        vm.expectRevert(bytes("Ownable: caller is not the owner"));
+        vm.prank(address(0));
+        collabTape.setBaseUri("new base uri");
+    }
+
     function onERC721Received(address, address, uint256, bytes memory) public virtual returns(bytes4) {
         return this.onERC721Received.selector;
     }
