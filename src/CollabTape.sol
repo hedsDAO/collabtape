@@ -25,6 +25,8 @@ contract CollabTape is ERC721A, Ownable {
     string public baseUri = "";
     // TODO: Update withdrawAddress
     address public withdrawAddress = 0xBEeFbeefbEefbeEFbeEfbEEfBEeFbeEfBeEfBeef;
+    // TODO: Update merkleRoot
+    bytes32 public merkleRoot = 0x0;
 
     // TODO: Update name/symbol if wanted
     constructor() ERC721A("collabTAPE", "CLBT") {
@@ -72,6 +74,11 @@ contract CollabTape is ERC721A, Ownable {
     /// @notice Update withdrawAddress - must be contract owner
     function setWithdrawAddress(address _withdrawAddress) external onlyOwner {
         withdrawAddress = _withdrawAddress;
+    }
+
+    /// @notice Update merkleRoot - must be contract owner
+    function setMerkleRoot(bytes32 _merkleRoot) external onlyOwner {
+        merkleRoot = _merkleRoot;
     }
 
     /// @notice Update sale start time - must be contract owner
