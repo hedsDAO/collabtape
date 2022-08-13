@@ -94,6 +94,14 @@ contract CollabTapeTest is Test {
         collabTape.mint{value: price - 1}(1);
     }
 
+    function testCannotMintBeyondMaxSupply() public {
+        _beginSale();
+        (uint64 price, uint32 maxSupply, ,) = collabTape.saleConfig();
+        uint valueToSend = uint(price) * uint(maxSupply + 1);
+        vm.expectRevert(abi.encodeWithSignature("ExceedsMaxSupply()"));
+        collabTape.mint{value: valueToSend}(maxSupply + 1);
+    }
+
     function onERC721Received(address, address, uint256, bytes memory) public virtual returns(bytes4) {
         return this.onERC721Received.selector;
     }
