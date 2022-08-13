@@ -37,6 +37,12 @@ contract CollabTapeTest is Test {
         collabTape.updatePremintStartTime(1650000000);
     }
 
+    function testSetBaseUriAsOwner() public {
+        collabTape.setBaseUri("new base uri");
+        string memory newBaseUri = collabTape.baseUri();
+        assertEq(newBaseUri, "new base uri");
+    }
+
     function onERC721Received(address, address, uint256, bytes memory) public virtual returns(bytes4) {
         return this.onERC721Received.selector;
     }

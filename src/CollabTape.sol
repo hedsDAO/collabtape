@@ -24,7 +24,7 @@ contract CollabTape is ERC721A, Ownable {
     // TODO: Add baseUri
     string public baseUri = "";
     // TODO: Update withdrawAddress
-    address private withdrawAddress = 0xBEeFbeefbEefbeEFbeEfbEEfBEeFbeEfBeEfBeef;
+    address public withdrawAddress = 0xBEeFbeefbEefbeEFbeEfbEEfBEeFbeEfBeEfBeef;
 
     // TODO: Update name/symbol if wanted
     constructor() ERC721A("collabTAPE", "CLBT") {
