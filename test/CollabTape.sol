@@ -11,6 +11,11 @@ contract CollabTapeTest is Test {
         collabTape = new CollabTape();
     }
 
+    function _beginSale() internal {
+        collabTape.updateStartTime(1650000000);
+        vm.warp(1650000000);
+    }
+
     function testUpdateStartTimeAsOwner() public {
         collabTape.updateStartTime(1650000000);
         (, , uint32 newStartTime, ) = collabTape.saleConfig();
@@ -80,6 +85,13 @@ contract CollabTapeTest is Test {
         (uint64 price, , ,) = collabTape.saleConfig();
         vm.expectRevert(abi.encodeWithSignature("BeforeSaleStart()"));
         collabTape.mint{value: price}(1);
+    }
+
+    function testCannotMintInsufficientFunds() public {
+        _beginSale();
+        (uint64 price, , ,) = collabTape.saleConfig();
+        vm.expectRevert(abi.encodeWithSignature("InsufficientFunds()"));
+        collabTape.mint{value: price - 1}(1);
     }
 
     function onERC721Received(address, address, uint256, bytes memory) public virtual returns(bytes4) {
