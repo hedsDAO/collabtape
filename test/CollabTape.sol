@@ -74,6 +74,14 @@ contract CollabTapeTest is Test {
         collabTape.setWithdrawAddress(address(0xbeef));
     }
 
+    function testCannotMintBeforeStartTime() public {
+        collabTape.updateStartTime(1650000000);
+        vm.warp(1649999999);
+        (uint64 price, , ,) = collabTape.saleConfig();
+        vm.expectRevert(abi.encodeWithSignature("BeforeSaleStart()"));
+        collabTape.mint{value: price}(1);
+    }
+
     function onERC721Received(address, address, uint256, bytes memory) public virtual returns(bytes4) {
         return this.onERC721Received.selector;
     }
