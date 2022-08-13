@@ -62,6 +62,18 @@ contract CollabTapeTest is Test {
         collabTape.setBaseUri("new base uri");
     }
 
+    function testUpdateWithdrawAddressAsOwner() public {
+        collabTape.setWithdrawAddress(address(0xbeef));
+        address newWithdrawAddress = collabTape.withdrawAddress();
+        assertEq(newWithdrawAddress, address(0xbeef));
+    }
+
+    function testCannotUpdateWithdrawAddressAsNotOwner() public {
+        vm.expectRevert(bytes("Ownable: caller is not the owner"));
+        vm.prank(address(0));
+        collabTape.setWithdrawAddress(address(0xbeef));
+    }
+
     function onERC721Received(address, address, uint256, bytes memory) public virtual returns(bytes4) {
         return this.onERC721Received.selector;
     }
