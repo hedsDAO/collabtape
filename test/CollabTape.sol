@@ -138,6 +138,28 @@ contract CollabTapeTest is Test {
         assertEq(uri, "ipfs://sup");
     }
 
+    function testWithdraw() public {
+        _beginSale();
+        (uint64 price, uint32 maxSupply, ,) = collabTape.saleConfig();
+        uint amount = uint(price) * uint(maxSupply);
+        address withdrawAddress = collabTape.withdrawAddress();
+        collabTape.mint{value: amount}(maxSupply);
+
+        assertEq(address(collabTape).balance, amount);
+
+        uint balanceBefore = address(withdrawAddress).balance;
+        collabTape.withdraw();
+        uint balanceAfter = address(withdrawAddress).balance;
+
+        assertEq(balanceAfter - balanceBefore, amount);
+    }
+
+    function testCannotWithdrawNotOwner() public {
+        vm.expectRevert(bytes("Ownable: caller is not the owner"));
+        vm.prank(address(1));
+        collabTape.withdraw();
+    }
+
     function onERC721Received(address, address, uint256, bytes memory) public virtual returns(bytes4) {
         return this.onERC721Received.selector;
     }
