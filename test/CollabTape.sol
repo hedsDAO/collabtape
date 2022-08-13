@@ -126,6 +126,18 @@ contract CollabTapeTest is Test {
         collabTape.mint{value: valueToSend}(maxSupply);
     }
 
+    function testTokenURI() public {
+        collabTape.setBaseUri("ipfs://sup");
+
+        _beginSale();
+        (uint64 price, uint32 maxSupply, ,) = collabTape.saleConfig();
+        uint valueToSend = uint(price) * uint(maxSupply);
+        collabTape.mint{value: valueToSend}(maxSupply);
+
+        string memory uri = collabTape.tokenURI(1);
+        assertEq(uri, "ipfs://sup");
+    }
+
     function onERC721Received(address, address, uint256, bytes memory) public virtual returns(bytes4) {
         return this.onERC721Received.selector;
     }
