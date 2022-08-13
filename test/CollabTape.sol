@@ -37,6 +37,19 @@ contract CollabTapeTest is Test {
         collabTape.updatePremintStartTime(1650000000);
     }
 
+    function testUpdateMaxSupplyAsOwner() public {
+        collabTape.updateMaxSupply(1650000000);
+        (, uint32 newMaxSupply, ,) = collabTape.saleConfig();
+
+        assertEq(newMaxSupply, 1650000000);
+    }
+
+    function testCannotUpdateMaxSupplyAsNotOwner() public {
+        vm.expectRevert(bytes("Ownable: caller is not the owner"));
+        vm.prank(address(0));
+        collabTape.updateMaxSupply(1650000000);
+    }
+
     function testSetBaseUriAsOwner() public {
         collabTape.setBaseUri("new base uri");
         string memory newBaseUri = collabTape.baseUri();
