@@ -2,6 +2,7 @@
 pragma solidity 0.8.10;
 
 import "forge-std/Test.sol";
+import "../src/CollabTape.sol";
 
 contract CollabTapeTest is Test {
     CollabTape collabTape;
@@ -10,7 +11,33 @@ contract CollabTapeTest is Test {
         collabTape = new CollabTape();
     }
 
-    function onERC721Received(address, address, uint256, bytes memory) public virtual override returns(bytes4) {
+    function testUpdateStartTimeAsOwner() public {
+        collabTape.updateStartTime(1650000000);
+        (, , uint32 newStartTime, ) = collabTape.saleConfig();
+
+        assertEq(newStartTime, 1650000000);
+    }
+
+    function testCannotUpdateStartTimeAsNotOwner() public {
+        vm.expectRevert(bytes("Ownable: caller is not the owner"));
+        vm.prank(address(0));
+        collabTape.updateStartTime(1650000000);
+    }
+
+    function testUpdatePremintStartTimeAsOwner() public {
+        collabTape.updatePremintStartTime(1650000000);
+        (, , , uint32 newPremintStartTime) = collabTape.saleConfig();
+
+        assertEq(newPremintStartTime, 1650000000);
+    }
+
+    function testCannotUpdatePremintStartTimeAsNotOwner() public {
+        vm.expectRevert(bytes("Ownable: caller is not the owner"));
+        vm.prank(address(0));
+        collabTape.updatePremintStartTime(1650000000);
+    }
+
+    function onERC721Received(address, address, uint256, bytes memory) public virtual returns(bytes4) {
         return this.onERC721Received.selector;
     }
 
