@@ -13,6 +13,8 @@ error BeforePremintStart();
 error InvalidProof();
 error AlreadyClaimed();
 
+/// @title ERC721 contract for https://heds.io/ collabTAPE
+/// @author https://github.com/kadenzipfel
 contract CollabTape is ERC721A, Ownable {
     struct SaleConfig {
         uint64 price;
