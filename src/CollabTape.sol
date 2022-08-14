@@ -3,11 +3,15 @@ pragma solidity 0.8.10;
 
 import "ERC721A/ERC721A.sol";
 import "openzeppelin-contracts/contracts/access/Ownable.sol";
+import "openzeppelin-contracts/contracts/utils/cryptography/MerkleProof.sol";
 
 error FailedTransfer();
 error InsufficientFunds();
 error ExceedsMaxSupply();
 error BeforeSaleStart();
+error BeforePremintStart();
+error InvalidProof();
+error AlreadyClaimed();
 
 contract CollabTape is ERC721A, Ownable {
     struct SaleConfig {
@@ -28,6 +32,8 @@ contract CollabTape is ERC721A, Ownable {
     // TODO: Update merkleRoot
     bytes32 public constant merkleRoot = 0x0;
 
+    mapping(address => bool) public claimed;
+
     // TODO: Update name/symbol if wanted
     constructor() ERC721A("collabTAPE", "CLBT") {
         saleConfig.price = 0.1 ether;
@@ -38,7 +44,26 @@ contract CollabTape is ERC721A, Ownable {
         saleConfig.premintStartTime = 0;
     }
 
-    /// @notice Mint a HedsTape token
+    /// @notice Premint a collabTAPE token
+    /// @param _merkleProof Merkle proof for whitelist verification
+    function preMint(bytes32[] calldata _merkleProof) external {
+        SaleConfig memory config = saleConfig;
+        uint _maxSupply = uint(config.maxSupply);
+        uint _premintStartTime = uint(config.premintStartTime);
+
+        if (_nextTokenId() + 1 > _maxSupply) revert ExceedsMaxSupply();
+        if (block.timestamp < _premintStartTime) revert BeforePremintStart();
+        if (
+            MerkleProof.verify(
+                _merkleProof, merkleRoot, toBytes32(msg.sender)) == false
+        ) revert InvalidProof();
+        if (claimed[msg.sender]) revert AlreadyClaimed();
+
+        claimed[msg.sender] = true;
+        _safeMint(msg.sender, 1);
+    }
+
+    /// @notice Mint a collabTAPE token
     /// @param _amount Number of tokens to mint
     function mint(uint _amount) external payable {
         SaleConfig memory config = saleConfig;
@@ -95,5 +120,9 @@ contract CollabTape is ERC721A, Ownable {
     function withdraw() external onlyOwner {
         (bool success, ) = payable(withdrawAddress).call{value: address(this).balance}("");
         if (!success) revert FailedTransfer();
+    }
+
+    function toBytes32(address addr) pure internal returns (bytes32){
+        return bytes32(uint256(uint160(addr)));
     }
 }
