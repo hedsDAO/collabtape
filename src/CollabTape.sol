@@ -51,11 +51,11 @@ contract CollabTape is ERC721A, Ownable {
         uint _maxSupply = uint(config.maxSupply);
         uint _premintStartTime = uint(config.premintStartTime);
 
-        if (_nextTokenId() + 1 > _maxSupply) revert ExceedsMaxSupply();
+        if (_nextTokenId() > _maxSupply) revert ExceedsMaxSupply();
         if (block.timestamp < _premintStartTime) revert BeforePremintStart();
         if (
             MerkleProof.verify(
-                _merkleProof, merkleRoot, toBytes32(msg.sender)) == false
+                _merkleProof, merkleRoot, _toBytes32(msg.sender)) == false
         ) revert InvalidProof();
         if (claimed[msg.sender]) revert AlreadyClaimed();
 
@@ -72,7 +72,7 @@ contract CollabTape is ERC721A, Ownable {
         uint _startTime = uint(config.startTime);
 
         if (_amount * _price != msg.value) revert InsufficientFunds();
-        if (_nextTokenId() + _amount > _maxSupply) revert ExceedsMaxSupply();
+        if (_nextTokenId() + _amount > _maxSupply + 1) revert ExceedsMaxSupply();
         if (block.timestamp < _startTime) revert BeforeSaleStart();
 
         _safeMint(msg.sender, _amount);
@@ -122,7 +122,11 @@ contract CollabTape is ERC721A, Ownable {
         if (!success) revert FailedTransfer();
     }
 
-    function toBytes32(address addr) pure internal returns (bytes32){
+    function _toBytes32(address addr) pure internal returns (bytes32){
         return bytes32(uint256(uint160(addr)));
+    }
+
+    function _startTokenId() internal view override returns (uint256) {
+        return 1;
     }
 }
