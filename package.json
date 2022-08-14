@@ -1,0 +1,8 @@
+{
+  "name": "collabtape",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:kadenzipfel/collabtape.git",
+  "author": "kadenzipfel <kaden.zipfel@hotmail.com>",
+  "license": "MIT"
+}
