@@ -16,6 +16,10 @@ contract CollabTapeTest is Test {
         vm.warp(1650000000);
     }
 
+    ////////////////////////////////////////////////////////////////
+    /*                AUTHORIZED FUNCTION TESTS                   */
+    ////////////////////////////////////////////////////////////////
+
     function testUpdateStartTimeAsOwner() public {
         collabTape.updateStartTime(1650000000);
         (, , uint32 newStartTime, ) = collabTape.saleConfig();
@@ -79,6 +83,10 @@ contract CollabTapeTest is Test {
         collabTape.setWithdrawAddress(address(0xbeef));
     }
 
+    ////////////////////////////////////////////////////////////////
+    /*                        MINT TESTS                          */
+    ////////////////////////////////////////////////////////////////
+
     function testCannotMintBeforeStartTime() public {
         collabTape.updateStartTime(1650000000);
         vm.warp(1649999999);
@@ -126,17 +134,9 @@ contract CollabTapeTest is Test {
         collabTape.mint{value: valueToSend}(maxSupply);
     }
 
-    function testTokenURI() public {
-        collabTape.setBaseUri("ipfs://sup");
-
-        _beginSale();
-        (uint64 price, uint32 maxSupply, ,) = collabTape.saleConfig();
-        uint valueToSend = uint(price) * uint(maxSupply);
-        collabTape.mint{value: valueToSend}(maxSupply);
-
-        string memory uri = collabTape.tokenURI(1);
-        assertEq(uri, "ipfs://sup");
-    }
+    ////////////////////////////////////////////////////////////////
+    /*                      WITHDRAW TESTS                        */
+    ////////////////////////////////////////////////////////////////
 
     function testWithdraw() public {
         _beginSale();
@@ -158,6 +158,22 @@ contract CollabTapeTest is Test {
         vm.expectRevert(bytes("Ownable: caller is not the owner"));
         vm.prank(address(1));
         collabTape.withdraw();
+    }
+
+    ////////////////////////////////////////////////////////////////
+    /*                      TOKENURI TESTS                        */
+    ////////////////////////////////////////////////////////////////
+
+    function testTokenURI() public {
+        collabTape.setBaseUri("ipfs://sup");
+
+        _beginSale();
+        (uint64 price, uint32 maxSupply, ,) = collabTape.saleConfig();
+        uint valueToSend = uint(price) * uint(maxSupply);
+        collabTape.mint{value: valueToSend}(maxSupply);
+
+        string memory uri = collabTape.tokenURI(1);
+        assertEq(uri, "ipfs://sup");
     }
 
     function onERC721Received(address, address, uint256, bytes memory) public virtual returns(bytes4) {

@@ -44,6 +44,10 @@ contract CollabTape is ERC721A, Ownable {
         saleConfig.premintStartTime = 0;
     }
 
+    ////////////////////////////////////////////////////////////////
+    /*                PUBLIC/EXTERNAL FUNCTIONS                   */
+    ////////////////////////////////////////////////////////////////
+
     /// @notice Premint a collabTAPE token
     /// @param _merkleProof Merkle proof for whitelist verification
     function preMint(bytes32[] calldata _merkleProof) external {
@@ -91,6 +95,10 @@ contract CollabTape is ERC721A, Ownable {
         return baseUri;
     }
 
+    ////////////////////////////////////////////////////////////////
+    /*                   AUTHORIZED FUNCTIONS                     */
+    ////////////////////////////////////////////////////////////////
+
     /// @notice Update baseUri - must be contract owner
     function setBaseUri(string calldata _baseUri) external onlyOwner {
         baseUri = _baseUri;
@@ -121,6 +129,10 @@ contract CollabTape is ERC721A, Ownable {
         (bool success, ) = payable(withdrawAddress).call{value: address(this).balance}("");
         if (!success) revert FailedTransfer();
     }
+
+    ////////////////////////////////////////////////////////////////
+    /*                    INTERNAL FUNCTIONS                      */
+    ////////////////////////////////////////////////////////////////
 
     function _toBytes32(address addr) pure internal returns (bytes32){
         return bytes32(uint256(uint160(addr)));
