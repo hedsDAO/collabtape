@@ -206,6 +206,14 @@ contract CollabTapeTest is Test {
         assertEq(balance, 1);
     }
 
+    function testNonWhitelistedAddressCannotPremint() public {
+        _beginPremint();
+        vm.prank(address(0xBEEF));
+
+        vm.expectRevert(InvalidProof.selector);
+        collabTape.preMint(proof);
+    }
+
     function onERC721Received(address, address, uint256, bytes memory) public virtual returns(bytes4) {
         return this.onERC721Received.selector;
     }
