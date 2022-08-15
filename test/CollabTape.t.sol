@@ -16,6 +16,11 @@ contract CollabTapeTest is Test {
         vm.warp(1650000000);
     }
 
+    function _beginPremint() internal {
+        collabTape.updateStartTime(1650000000);
+        vm.warp(1650000000);
+    }
+
     ////////////////////////////////////////////////////////////////
     /*                AUTHORIZED FUNCTION TESTS                   */
     ////////////////////////////////////////////////////////////////
@@ -114,6 +119,9 @@ contract CollabTapeTest is Test {
         _beginSale();
         (uint64 price, , ,) = collabTape.saleConfig();
         collabTape.mint{value: price}(1);
+
+        uint256 balance = collabTape.balanceOf(address(this));
+        assertEq(balance, 1);
     }
 
     function testMint(uint16 amount) public {
@@ -125,6 +133,9 @@ contract CollabTapeTest is Test {
         uint valueToSend = uint(price) * uint(amount);
 
         collabTape.mint{value: valueToSend}(amount);
+
+        uint256 balance = collabTape.balanceOf(address(this));
+        assertEq(balance, amount);
     }
 
     function testMintUpToMaxSupply() public {
@@ -132,6 +143,9 @@ contract CollabTapeTest is Test {
         (uint64 price, uint32 maxSupply, ,) = collabTape.saleConfig();
         uint valueToSend = uint(price) * uint(maxSupply);
         collabTape.mint{value: valueToSend}(maxSupply);
+
+        uint256 balance = collabTape.balanceOf(address(this));
+        assertEq(balance, maxSupply);
     }
 
     ////////////////////////////////////////////////////////////////
@@ -174,6 +188,22 @@ contract CollabTapeTest is Test {
 
         string memory uri = collabTape.tokenURI(1);
         assertEq(uri, "ipfs://sup");
+    }
+
+    ////////////////////////////////////////////////////////////////
+    /*                       PREMINT TESTS                        */
+    ////////////////////////////////////////////////////////////////
+
+    bytes32[] proof = [bytes32(0x00000000000000000000000096acf191c0112806f9709366bad77642b99b21a9),bytes32(0x2b59fca3b3910643b3b3ff3b9a17f517387be19c38774b28d7842ac71b4ec404),bytes32(0xba4f04023db136f4d00c8558a8853be50bf7645ceb4e7c41e09c250b12bfea32),bytes32(0x644b4462efc7ff5d834399fffab9529bc1cbcc1aeaa9b1d443392d7e1b4739e2),bytes32(0x01e00cc1656efe5cd6c96e9f949f4b7cf1a2dfd528c1e1b1ab3e95daef92cdf9),bytes32(0x7d894bde8018c314d640a78ae2cf6440f4bee00b901c59654052f5b810a0dcd4),bytes32(0x7a832f703c19cbfe8609d789fef0a5ad07266c1914cb8bc0fbc52fd1d50f082e),bytes32(0xc5f2aa4f53098f9e78441d3764a69a4a2cbd495765d49c02308d528b5717e357)];
+    address whitelistedAddress = 0x958E2EBB40147DFeE318aB640D9f0e66783eC62d;
+
+    function testWhitelistedAddressCanPremint() public {
+        _beginSale();
+        vm.prank(whitelistedAddress);
+        collabTape.preMint(proof);
+
+        uint256 balance = collabTape.balanceOf(whitelistedAddress);
+        assertEq(balance, 1);
     }
 
     function onERC721Received(address, address, uint256, bytes memory) public virtual returns(bytes4) {

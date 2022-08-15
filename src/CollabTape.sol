@@ -32,7 +32,7 @@ contract CollabTape is ERC721A, Ownable {
     // TODO: Update withdrawAddress
     address public withdrawAddress = 0xBEeFbeefbEefbeEFbeEfbEEfBEeFbeEfBeEfBeef;
     // TODO: Update merkleRoot
-    bytes32 public constant merkleRoot = 0x0;
+    bytes32 public constant merkleRoot = 0xe2a89100bfc895a23478aec03cdfc9972e939918d2e883911c68435b32f15d83;
 
     mapping(address => bool) public claimed;
 
@@ -140,7 +140,7 @@ contract CollabTape is ERC721A, Ownable {
         return bytes32(uint256(uint160(addr)));
     }
 
-    function _startTokenId() internal view override returns (uint256) {
+    function _startTokenId() internal pure override returns (uint256) {
         return 1;
     }
 }
