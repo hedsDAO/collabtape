@@ -17,7 +17,7 @@ contract CollabTapeTest is Test {
     }
 
     function _beginPremint() internal {
-        collabTape.updateStartTime(1650000000);
+        collabTape.updatePremintStartTime(1650000000);
         vm.warp(1650000000);
     }
 
@@ -198,7 +198,7 @@ contract CollabTapeTest is Test {
     address whitelistedAddress = 0x958E2EBB40147DFeE318aB640D9f0e66783eC62d;
 
     function testWhitelistedAddressCanPremint() public {
-        _beginSale();
+        _beginPremint();
         vm.prank(whitelistedAddress);
         collabTape.preMint(proof);
 
