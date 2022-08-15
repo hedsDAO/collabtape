@@ -11,3 +11,5 @@ function paddedBuffer(addr) {
 
   return buf;
 }
+
+module.exports = { paddedBuffer };

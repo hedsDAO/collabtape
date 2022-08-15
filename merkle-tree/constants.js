@@ -74,3 +74,5 @@ const genHeds = [
   "0x65786b3dee53d4c61e2fd0bd0f7049c2613b376a",
   "0xa3d1c6ce2d602668f27a7685ddf7ce2a08a7b555",
 ];
+
+module.exports = { contracts, genHeds };

@@ -6,8 +6,12 @@
   "author": "kadenzipfel <kaden.zipfel@hotmail.com>",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^16.0.1",
     "ethers": "^5.6.9",
     "keccak256": "^1.0.6",
     "merkletreejs": "^0.2.32"
+  },
+  "scripts": {
+    "gen-proofs": "node merkle-tree/generateProofs.js"
   }
 }
