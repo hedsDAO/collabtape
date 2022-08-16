@@ -85,19 +85,6 @@ contract CollabTape is ERC721A, Ownable {
         _safeMint(msg.sender, _amount);
     }
 
-    /// @notice Return tokenURI for a given token
-    /// @dev Same tokenURI returned for all tokenId's
-    function tokenURI(uint256 _tokenId)
-        public
-        view
-        override
-        returns (string memory)
-    {
-        if (0 == _tokenId || _tokenId > _nextTokenId() - 1) revert
-            URIQueryForNonexistentToken();
-        return baseUri;
-    }
-
     ////////////////////////////////////////////////////////////////
     /*                   AUTHORIZED FUNCTIONS                     */
     ////////////////////////////////////////////////////////////////
@@ -143,5 +130,9 @@ contract CollabTape is ERC721A, Ownable {
 
     function _startTokenId() internal pure override returns (uint256) {
         return 1;
+    }
+
+    function _baseURI() internal view override returns (string memory) {
+        return baseUri;
     }
 }

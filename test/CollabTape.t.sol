@@ -179,7 +179,7 @@ contract CollabTapeTest is Test {
     ////////////////////////////////////////////////////////////////
 
     function testTokenURI() public {
-        collabTape.setBaseUri("ipfs://sup");
+        collabTape.setBaseUri("ipfs://sup/");
 
         _beginSale();
         (uint64 price, uint32 maxSupply, ,) = collabTape.saleConfig();
@@ -187,7 +187,7 @@ contract CollabTapeTest is Test {
         collabTape.mint{value: valueToSend}(maxSupply);
 
         string memory uri = collabTape.tokenURI(1);
-        assertEq(uri, "ipfs://sup");
+        assertEq(uri, "ipfs://sup/1");
     }
 
     ////////////////////////////////////////////////////////////////
