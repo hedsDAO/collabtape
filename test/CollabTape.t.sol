@@ -224,6 +224,14 @@ contract CollabTapeTest is Test {
         collabTape.preMint(proof);
     }
 
+    function testCannotPremintBeforeStartTime() public {
+        collabTape.updatePremintStartTime(1650000000);
+        vm.warp(1649999999);
+        vm.expectRevert(abi.encodeWithSignature("BeforePremintStart()"));
+        vm.prank(whitelistedAddress);
+        collabTape.preMint(proof);
+    }
+
     function onERC721Received(address, address, uint256, bytes memory) public virtual returns(bytes4) {
         return this.onERC721Received.selector;
     }
