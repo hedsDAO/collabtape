@@ -59,11 +59,11 @@ contract CollabTape is ERC721A, Ownable {
 
         if (_nextTokenId() > _maxSupply) revert ExceedsMaxSupply();
         if (block.timestamp < _premintStartTime) revert BeforePremintStart();
+        if (claimed[msg.sender]) revert AlreadyClaimed();
         if (
             MerkleProof.verify(
                 _merkleProof, merkleRoot, _toBytes32(msg.sender)) == false
         ) revert InvalidProof();
-        if (claimed[msg.sender]) revert AlreadyClaimed();
 
         claimed[msg.sender] = true;
         _safeMint(msg.sender, 1);

@@ -214,6 +214,16 @@ contract CollabTapeTest is Test {
         collabTape.preMint(proof);
     }
 
+    function testWhitelistedAddressCannotPremintTwice() public {
+        _beginPremint();
+        vm.prank(whitelistedAddress);
+        collabTape.preMint(proof);
+
+        vm.expectRevert(AlreadyClaimed.selector);
+        vm.prank(whitelistedAddress);
+        collabTape.preMint(proof);
+    }
+
     function onERC721Received(address, address, uint256, bytes memory) public virtual returns(bytes4) {
         return this.onERC721Received.selector;
     }
