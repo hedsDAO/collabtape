@@ -31,9 +31,10 @@ contract CollabTape is ERC721A, Ownable {
     string public baseUri = "";
     // TODO: Update withdrawAddress
     address public withdrawAddress = 0xBEeFbeefbEefbeEFbeEfbEEfBEeFbeEfBeEfBeef;
-    // TODO: Update merkleRoot
+    // TODO: Update merkleRoot if necessary
     bytes32 public constant merkleRoot = 0xe2a89100bfc895a23478aec03cdfc9972e939918d2e883911c68435b32f15d83;
 
+    /// @notice Tracking whitelisted address claims
     mapping(address => bool) public claimed;
 
     // TODO: Update name/symbol if wanted
