@@ -40,6 +40,7 @@ const main = async () => {
     const proof = tree.getHexProof(leaf);
     proofs[address.toLowerCase()] = proof;
   }
+  fs.writeFileSync("whitelist.json", JSON.stringify(whitelist));
   fs.writeFileSync("root.json", JSON.stringify(root));
   fs.writeFileSync("proofs.json", JSON.stringify(proofs));
 };
