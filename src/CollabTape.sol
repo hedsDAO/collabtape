@@ -27,7 +27,6 @@ contract CollabTape is ERC721A, Ownable {
     /// @dev Sale data packed into single storage slot
     SaleConfig public saleConfig;
 
-    // TODO: Add baseUri
     string public baseUri = "https://www.heds.io";
     address public withdrawAddress = 0x9E9320E6d78C0493EdDf1c760dc50D0D27f58767;
     bytes32 public constant merkleRoot = 0xd6ecfd8d33e85dab6092748736a3edc5adaa3122fd2ab888d1153fd25e26c23b;
