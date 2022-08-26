@@ -11,6 +11,8 @@ const contracts = [
   { address: "0x8f36eB094F7B960a234a482d4d8FFb8b37f728C6", totalSupply: 33 },
   // hedsTape 06
   { address: "0x885236535D5Cf7033BdC5bC1050CaD7fdf4970a6", totalSupply: 28 },
+  // hedsTape 07
+  { address: "0x20F2717F113d0B3815124876F3D72f8E1179341e", totalSupply: 46 }
 ];
 
 const genHeds = [

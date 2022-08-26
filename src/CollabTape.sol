@@ -28,23 +28,18 @@ contract CollabTape is ERC721A, Ownable {
     SaleConfig public saleConfig;
 
     // TODO: Add baseUri
-    string public baseUri = "";
-    // TODO: Update withdrawAddress
-    address public withdrawAddress = 0xBEeFbeefbEefbeEFbeEfbEEfBEeFbeEfBeEfBeef;
-    // TODO: Update merkleRoot if necessary
-    bytes32 public constant merkleRoot = 0xe2a89100bfc895a23478aec03cdfc9972e939918d2e883911c68435b32f15d83;
+    string public baseUri = "https://www.heds.io";
+    address public withdrawAddress = 0x9E9320E6d78C0493EdDf1c760dc50D0D27f58767;
+    bytes32 public constant merkleRoot = 0xd6ecfd8d33e85dab6092748736a3edc5adaa3122fd2ab888d1153fd25e26c23b;
 
     /// @notice Tracking whitelisted address claims
     mapping(address => bool) public claimed;
 
-    // TODO: Update name/symbol if wanted
     constructor() ERC721A("collabTAPE", "CLBT") {
         saleConfig.price = 0.1 ether;
-        saleConfig.maxSupply = 132;
-        // TODO: Set startTime
-        saleConfig.startTime = 0;
-        // TODO: Set premintStartTime
-        saleConfig.premintStartTime = 0;
+        saleConfig.maxSupply = 100;
+        saleConfig.startTime = 1661626770;
+        saleConfig.premintStartTime = 1661540370;
     }
 
     ////////////////////////////////////////////////////////////////
